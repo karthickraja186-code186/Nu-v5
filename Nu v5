@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NU EXPORTS</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f6f9;
+    color: #26384a;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 15px;
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, #0877bd, #08a8d8);
+    color: white;
+    text-align: center;
+    padding: 22px;
+    border-radius: 18px;
+    margin-bottom: 15px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.header p {
+    margin: 6px 0 0;
+}
+
+/* DASHBOARD */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.dashboard-box {
+    background: white;
+    padding: 15px 5px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 2px 8px #d5dce2;
+}
+
+.dashboard-box h3 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.dashboard-box strong {
+    display: block;
+    font-size: 28px;
+    margin-top: 5px;
+}
+
+.total strong {
+    color: #0877bd;
+}
+
+.pending strong {
+    color: #e49a00;
+}
+
+.delivered strong {
+    color: #159447;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 18px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 9px #d5dce2;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #31547c;
+}
+
+/* FORM */
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd4dc;
+    border-radius: 9px;
+    font-size: 16px;
+    background: white;
+}
+
+/* BUTTONS */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 18px;
+}
+
+button {
+    border: none;
+    border-radius: 9px;
+    padding: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.save-btn {
+    background: #0877bd;
+}
+
+.update-btn {
+    background: #159447;
+}
+
+.clear-btn {
+    background: #777;
+}
+
+.search-box {
+    border: 2px solid #0877bd;
+}
+
+/* TABLE */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+th,
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #0877bd;
+    color: white;
+}
+
+.pending-status {
+    color: #e49a00;
+    font-weight: bold;
+}
+
+.delivered-status {
+    color: #159447;
+    font-weight: bold;
+}
+
+.action-btn {
+    padding: 7px 10px;
+    font-size: 13px;
+    margin: 2px;
+}
+
+.edit-btn {
+    background: #0877bd;
+}
+
+.status-btn {
+    background: #159447;
+}
+
+.delete-btn {
+    background: #d93636;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+    .container {
+        padding: 10px;
+    }
+
+    .header h1 {
+        font-size: 25px;
+    }
+
+    .dashboard-box {
+        padding: 12px 3px;
+    }
+
+    .dashboard-box h3 {
+        font-size: 12px;
+    }
+
+    .dashboard-box strong {
+        font-size: 24px;
+    }
+
+    .buttons {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+    <h1>NU EXPORTS</h1>
+    <p>Transport & Parcel Management</p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+
+    <div class="dashboard-box total">
+        <h3>Total Parcels</h3>
+        <strong id="totalCount">0</strong>
+    </div>
+
+    <div class="dashboard-box pending">
+        <h3>Pending Parcels</h3>
+        <strong id="pendingCount">0</strong>
+    </div>
+
+    <div class="dashboard-box delivered">
+        <h3>Delivered Parcels</h3>
+        <strong id="deliveredCount">0</strong>
+    </div>
+
+</div>
+
+<!-- PARCEL FORM -->
+<div class="card">
+
+<h2>📦 Parcel Details</h2>
+
+<label>LR Number *</label>
+<input type="text" id="lrNumber" placeholder="Enter LR Number">
+
+<label>Transport Name *</label>
+<input type="text" id="transportName" placeholder="Enter Transport Name">
+
+<label>Number of Articles *</label>
+<input type="number" id="articles" placeholder="Enter Number of Articles">
+
+<label>Freight Amount</label>
+<input type="number" id="freight" placeholder="₹ Freight Amount">
+
+<label>Local Freight Amount</label>
+<input type="number" id="localFreight" placeholder="₹ Local Freight Amount">
+
+<label>Booking Date</label>
+<input type="date" id="bookingDate">
+
+<label>Delivery Date</label>
+<input type="date" id="deliveryDate">
+
+<label>Delivery Status</label>
+
+<select id="deliveryStatus">
+    <option value="Pending">Pending</option>
+    <option value="Delivered">Delivered</option>
+</select>
+
+<!-- BUTTONS -->
+<div class="buttons">
+
+    <button class="save-btn" onclick="saveParcel()">
+        💾 SAVE
+    </button>
+
+    <button class="update-btn" onclick="updateParcel()">
+        ✏️ UPDATE
+    </button>
+
+    <button class="clear-btn" onclick="clearForm()">
+        🧹 CLEAR
+    </button>
+
+</div>
+
+</div>
+
+<!-- SEARCH -->
+<div class="card">
+
+<h2>🔎 Search Box</h2>
+
+<input
+    type="text"
+    id="searchBox"
+    class="search-box"
+    placeholder="Search LR Number or Transport Name..."
+    oninput="displayParcels()"
+>
+
+</div>
+
+<!-- PARCEL LIST -->
+<div class="card">
+
+<h2>📋 Parcel List</h2>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+    <th>LR Number</th>
+    <th>Transport</th>
+    <th>Articles</th>
+    <th>Freight</th>
+    <th>Local Freight</th>
+    <th>Booking Date</th>
+    <th>Delivery Date</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="parcelTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+   DATA
+========================= */
+
+let parcels = JSON.parse(
+    localStorage.getItem("NU_EXPORTS_DATA") || "[]"
+);
+
+let editingId = null;
+
+
+/* =========================
+   SAVE DATA
+========================= */
+
+function saveData() {
+
+    localStorage.setItem(
+        "NU_EXPORTS_DATA",
+        JSON.stringify(parcels)
+    );
+
+}
+
+
+/* =========================
+   GET FORM DATA
+========================= */
+
+function getFormData() {
+
+    let lr = document
+        .getElementById("lrNumber")
+        .value
+        .trim();
+
+    let transport = document
+        .getElementById("transportName")
+        .value
+        .trim();
+
+    let articles = document
+        .getElementById("articles")
+        .value;
+
+    if (lr === "") {
+
+        alert("Please enter LR Number");
+
+        return null;
+    }
+
+    if (transport === "") {
+
+        alert("Please enter Transport Name");
+
+        return null;
+    }
+
+    if (articles === "") {
+
+        alert("Please enter Number of Articles");
+
+        return null;
+    }
+
+    return {
+
+        lr: lr,
+
+        transport: transport,
+
+        articles: Number(articles),
+
+        freight: Number(
+            document.getElementById("freight").value || 0
+        ),
+
+        localFreight: Number(
+            document.getElementById("localFreight").value || 0
+        ),
+
+        bookingDate:
+            document.getElementById("bookingDate").value,
+
+        deliveryDate:
+            document.getElementById("deliveryDate").value,
+
+        status:
+            document.getElementById("deliveryStatus").value
+
+    };
+
+}
+
+
+/* =========================
+   SAVE PARCEL
+========================= */
+
+function saveParcel() {
+
+    let parcel = getFormData();
+
+    if (!parcel) return;
+
+    parcel.id = Date.now();
+
+    parcels.push(parcel);
+
+    saveData();
+
+    clearForm();
+
+    displayParcels();
+
+    alert("Parcel saved successfully!");
+
+}
+
+
+/* =========================
+   EDIT PARCEL
+========================= */
+
+function editParcel(id) {
+
+    let parcel = parcels.find(
+        p => p.id === id
+    );
+
+    if (!parcel) return;
+
+    editingId = id;
+
+    document.getElementById("lrNumber").value =
+        parcel.lr;
+
+    document.getElementById("transportName").value =
+        parcel.transport;
+
+    document.getElementById("articles").value =
+        parcel.articles;
+
+    document.getElementById("freight").value =
+        parcel.freight;
+
+    document.getElementById("localFreight").value =
+        parcel.localFreight;
+
+    document.getElementById("bookingDate").value =
+        parcel.bookingDate;
+
+    document.getElementById("deliveryDate").value =
+        parcel.deliveryDate;
+
+    document.getElementById("deliveryStatus").value =
+        parcel.status;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================
+   UPDATE PARCEL
+========================= */
+
+function updateParcel() {
+
+    if (editingId === null) {
+
+        alert(
+            "Please click EDIT on a parcel first."
+        );
+
+        return;
+    }
+
+    let updated = getFormData();
+
+    if (!updated) return;
+
+    let index = parcels.findIndex(
+        p => p.id === editingId
+    );
+
+    if (index === -1) return;
+
+    parcels[index] = {
+
+        id: editingId,
+
+        ...updated
+
+    };
+
+    saveData();
+
+    clearForm();
+
+    displayParcels();
+
+    alert("Parcel updated successfully!");
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearForm() {
+
+    document.getElementById("lrNumber").value = "";
+
+    document.getElementById("transportName").value = "";
+
+    document.getElementById("articles").value = "";
+
+    document.getElementById("freight").value = "";
+
+    document.getElementById("localFreight").value = "";
+
+    document.getElementById("bookingDate").value = "";
+
+    document.getElementById("deliveryDate").value = "";
+
+    document.getElementById("deliveryStatus").value =
+        "Pending";
+
+    editingId = null;
+
+}
+
+
+/* =========================
+   CHANGE STATUS
+========================= */
+
+function changeStatus(id) {
+
+    let parcel = parcels.find(
+        p => p.id === id
+    );
+
+    if (!parcel) return;
+
+    if (parcel.status === "Pending") {
+
+        parcel.status = "Delivered";
+
+    } else {
+
+        parcel.status = "Pending";
+
+    }
+
+    saveData();
+
+    displayParcels();
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteParcel(id) {
+
+    let answer = confirm(
+        "Are you sure you want to delete this parcel?"
+    );
+
+    if (!answer) return;
+
+    parcels = parcels.filter(
+        p => p.id !== id
+    );
+
+    saveData();
+
+    displayParcels();
+
+}
+
+
+/* =========================
+   SEARCH + DISPLAY
+========================= */
+
+function displayParcels() {
+
+    let search = document
+        .getElementById("searchBox")
+        .value
+        .toLowerCase()
+        .trim();
+
+    let table =
+        document.getElementById("parcelTable");
+
+    table.innerHTML = "";
+
+    let filtered = parcels.filter(parcel =>
+
+        parcel.lr
+            .toLowerCase()
+            .includes(search)
+
+        ||
+
+        parcel.transport
+            .toLowerCase()
+            .includes(search)
+
+    );
+
+
+    filtered.forEach(parcel => {
+
+        let row =
+            document.createElement("tr");
+
+        let statusClass =
+            parcel.status === "Pending"
+            ? "pending-status"
+            : "delivered-status";
+
+
+        row.innerHTML = `
+
+        <td>${safe(parcel.lr)}</td>
+
+        <td>${safe(parcel.transport)}</td>
+
+        <td>${parcel.articles}</td>
+
+        <td>₹${parcel.freight}</td>
+
+        <td>₹${parcel.localFreight}</td>
+
+        <td>${parcel.bookingDate || "-"}</td>
+
+        <td>${parcel.deliveryDate || "-"}</td>
+
+        <td class="${statusClass}">
+            ${parcel.status}
+        </td>
+
+        <td>
+
+            <button
+                class="action-btn edit-btn"
+                onclick="editParcel(${parcel.id})">
+
+                Edit
+
+            </button>
+
+            <button
+                class="action-btn status-btn"
+                onclick="changeStatus(${parcel.id})">
+
+                ${parcel.status === "Pending"
+                    ? "Delivered"
+                    : "Pending"}
+
+            </button>
+
+            <button
+                class="action-btn delete-btn"
+                onclick="deleteParcel(${parcel.id})">
+
+                Delete
+
+            </button>
+
+        </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+
+    updateDashboard();
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard() {
+
+    let total = parcels.length;
+
+    let pending =
+        parcels.filter(
+            p => p.status === "Pending"
+        ).length;
+
+    let delivered =
+        parcels.filter(
+            p => p.status === "Delivered"
+        ).length;
+
+
+    document.getElementById(
+        "totalCount"
+    ).textContent = total;
+
+
+    document.getElementById(
+        "pendingCount"
+    ).textContent = pending;
+
+
+    document.getElementById(
+        "deliveredCount"
+    ).textContent = delivered;
+
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function safe(value) {
+
+    return String(value || "")
+        .replace(/[&<>"']/g, function(char) {
+
+            return {
+
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+
+            }[char];
+
+        });
+
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+displayParcels();
+
+</script>
+
+</body>
+</html>
